@@ -9,21 +9,27 @@
 
 import Foundation
 import CaamDau
-import PGPay
-class App_WXPay: CD_AppDelegate {
-    
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        PGPay.WX.registerApp("")
-        PGPay.WX.scheme = CD.appUrlScheme("wx")
-        return true
-    }
-    
-    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-        
-        return true
-    }
-}
 
-extension App_WXPay {
+public class App_WXPay: CD_AppDelegate {
+    private override init() {
+        
+    }
+    var scheme = ""
+    var appid = ""
+    /// 用此方法初始化 传如 URLTypes 设置的可s判定识别的 Scheme 前缀即可
+    /// 如果不传入 appid 则取实际的 scheme
+    public init(_ scheme:String, appid:String = "") {
+        self.scheme = CD.appUrlScheme(scheme)
+        self.appid = appid.isEmpty ? scheme : appid
+    }
+    public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        PGPay.Ali.scheme = scheme
+        PGPay.WX.registerApp(appid)
+        return true
+    }
     
+    public func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        PGPay.WX.handleOpen(url)
+        return true
+    }
 }

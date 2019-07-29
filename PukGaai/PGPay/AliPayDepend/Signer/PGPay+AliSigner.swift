@@ -15,10 +15,10 @@ extension PGPay.Ali.Signer:PGPayProtocol {
     typealias DataSource = (order:PGPay.Ali.Signer.Order, key:String)
     static var scheme: String {
         get {
-            return PGPay.Ali._scheme
+            return PGPay.shared.schemes["ali"] ?? ""
         }
         set {
-            PGPay.Ali._scheme = newValue
+            PGPay.shared.schemes["ali"] = newValue
         }
     }
     
@@ -29,33 +29,44 @@ extension PGPay.Ali.Signer:PGPayProtocol {
     static func pay(_ order: (order:PGPay.Ali.Signer.Order, key:String), completion: ((PGPay.Status) -> Void)?) {
         let signer = APRSASigner(privateKey: order.key)
         let description = order.order.toString()
+        print_cd(description)
         guard let signedString = signer?.sign(description, withRSA2: false) else {
             completion?(.signerError)
             return
         }
-        PGPay.Ali.pay(signedString, completion: completion)
+        let checkStr =  description+"&sign=\"\(signedString)\"&sign_type=\"\("RSA")\""
+        PGPay.Ali.pay(checkStr, completion: completion)
     }
 }
 extension PGPay.Ali {
     struct Signer {
         public struct Order {
-            public init() {}
-            public var partner:String = ""
-            public var seller_id:String = ""
-            public var out_trade_no:String = ""
-            public var total_fee:String = ""
-            public var notify_url:String = ""
-            public var body:String = ""
-            public var subject:String = ""
+            public init(partner:String, seller_id:String, out_trade_no:String, total_fee:String, notify_url:String, body:String, subject:String, service:String) {
+                self.partner = partner
+                self.seller_id = seller_id
+                self.out_trade_no = out_trade_no
+                self.total_fee = total_fee
+                self.notify_url = notify_url
+                self.body = body
+                self.subject = subject
+                self.service = service
+            }
+            public var partner:String
+            public var seller_id:String
+            public var out_trade_no:String
+            public var total_fee:String
+            public var notify_url:String
+            public var body:String
+            public var subject:String
             
-            public var service = "alipay.trade.app.pay"
+            public var service:String  //"alipay.trade.app.pay"
             public var payment_type = "1"
             public var _input_charset = "utf-8"
             public var it_b_pay = "30m"
             public var show_url = "m.alipay.com"
             func toString() -> String {
                 let structMirror = Mirror(reflecting: self).children
-                return structMirror.filter{$0.label != nil}.map{$0.label!.stringValue + "=" + "\($0.value)"}.joined(separator: "&")
+                return structMirror.filter{$0.label != nil}.map{$0.label!.stringValue + "=" + "\"\($0.value)\""}.joined(separator: "&")
             }
         }
     }

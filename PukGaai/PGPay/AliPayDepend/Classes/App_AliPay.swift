@@ -9,17 +9,24 @@
 
 import Foundation
 import CaamDau
-import PGPay
-class App_AliPay: CD_AppDelegate {
+
+public class App_AliPay: CD_AppDelegate {
     
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+    private override init() {
         
-        PGPay.Ali.scheme = CD.appUrlScheme("own")
+    }
+    var scheme = ""
+    /// 用此方法初始化 传如 URLTypes 设置的可s判定识别的 Scheme 前缀即可
+    public init(_ scheme:String) {
+        self.scheme = CD.appUrlScheme(scheme)
         
+    }
+    public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        PGPay.Ali.scheme = scheme
         return true
     }
     
-    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+    public func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         PGPay.Ali.handleOpen(url)
         return true
     }

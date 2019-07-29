@@ -9,7 +9,6 @@
 
 import Foundation
 import CaamDau
-import PGPay
 
 public protocol PGPayProtocol {
     associatedtype DataSource
@@ -22,10 +21,7 @@ public protocol PGPayProtocol {
 public class PGPay {
     private init(){}
     public static let shared = PGPay()
-    
-    /*open lazy var wxDelegate:PGPayWXApiDelegate = {
-        return PGPayWXApiDelegate()
-    }()*/
+    open var schemes:[String:String] = [:]
     open var completion:((PGPay.Status)->Void)?
 }
 
@@ -38,7 +34,7 @@ public extension PGPay {
     
     enum Status {
         case succeed
-        case deal
+        case dealing
         case cancel
         case error(_ code:Int, _ msg:String)
         case signerError
@@ -54,5 +50,3 @@ extension PGPay.Notic: CaamDauNotificationProtocol {
         return Notification.Name(CD.appId + ".pay." + self.rawValue)
     }
 }
-
-

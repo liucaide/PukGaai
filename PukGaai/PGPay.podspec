@@ -17,23 +17,18 @@ Pod::Spec.new do |s|
   s.swift_version = '5.0'
   s.static_framework = true
 
-  s.default_subspec = 'All'
+  s.default_subspec = 'Core'
+  s.source_files = 'PGPay/PGPay.swift'
   
   s.subspec 'Core' do |core|
-    core.source_files = 'PGPay/PGPay.swift'
-    
-  end
-  s.subspec 'All' do |all|
-    all.dependency 'PGPay/Core'
-    all.dependency 'PGPay/Ali'
-    all.dependency 'PGPay/Wechat'
-    all.dependency 'PGPay/Union'
+    core.dependency 'PGPay/Ali'
+    core.dependency 'PGPay/Wechat'
+    core.dependency 'PGPay/Union'
   end
 
   s.subspec 'Ali' do |ali|
     ali.source_files = 'PGPay/AliPayDepend/Classes/**/*', 'Pods/AlipaySDK-iOS/AlipaySDK.framework/Headers/*.h'
     ali.dependency 'AlipaySDK-iOS'
-    ali.dependency 'CaamDau/AppDelegate'
     
 #    ali.xcconfig = {
 #      'OTHER_LDFLAGS' => '-ObjC',
@@ -49,7 +44,6 @@ Pod::Spec.new do |s|
   s.subspec 'Wechat' do |wx|
     wx.source_files = 'PGPay/WXPayDepend/Classes/**/*', 'Pods/WechatOpenSDK/WeChatSDK1.8.4/*.h'
     wx.dependency 'WechatOpenSDK'
-    wx.dependency 'CaamDau/AppDelegate'
   end
 
   s.subspec 'Union' do |un|
@@ -59,6 +53,7 @@ Pod::Spec.new do |s|
     un.ios.library = 'c++', 'z'
     un.vendored_libraries = 'PGPay/UnionPay/Frameworks/*.a'
     un.public_header_files = 'PGPay/UnionPay/Frameworks/*.h'
-    un.dependency 'CaamDau/AppDelegate'
   end
+
+  s.dependency 'CaamDau'
 end

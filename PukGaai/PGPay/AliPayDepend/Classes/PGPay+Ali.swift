@@ -9,31 +9,37 @@
 
 import Foundation
 import CaamDau
-import PGPay
 
 
 //MARK:--- 支付宝支付 ----------
+public extension PGPay {
+    public struct Ali {}
+}
+
+
 extension PGPay.Ali: PGPayProtocol {
     public typealias DataSource = String
     
     public static var scheme: String {
         get {
-            return PGPay.Ali._scheme
+            return PGPay.shared.schemes["ali"] as? String ?? ""
         }
         set {
-            PGPay.Ali._scheme = newValue
+            PGPay.shared.schemes["ali"] = newValue
         }
     }
     public static func handleOpen(_ url: URL) {
+        
         guard url.host == "safepay" else { return }
+        
         AlipaySDK.defaultService().processOrder(withPaymentResult: url, standbyCallback: { (result) -> Void in
             let code = result?.intValue("resultStatus") ?? 0
-            var payStatus = PGPay.Status.deal
+            var payStatus = PGPay.Status.dealing
             switch code {
             case 9000:
                 payStatus = .succeed
             case 8000,6004:
-                payStatus = .deal
+                payStatus = .dealing
             case 6001:
                 payStatus = .cancel
             case 4000:
@@ -47,14 +53,15 @@ extension PGPay.Ali: PGPayProtocol {
     }
     
     public static func pay(_ order: String, completion: ((PGPay.Status) -> Void)?) {
-        AlipaySDK.defaultService()?.payOrder(order, fromScheme: "eyxstore", callback: { (result) in
+        PGPay.shared.completion = completion
+        AlipaySDK.defaultService()?.payOrder(order, fromScheme: scheme, callback: { (result) in
             let code = result?.intValue("resultStatus") ?? 0
-            var payStatus = PGPay.Status.deal
+            var payStatus = PGPay.Status.dealing
             switch code {
             case 9000:
                 payStatus = .succeed
             case 8000,6004:
-                payStatus = .deal
+                payStatus = .dealing
             case 6001:
                 payStatus = .cancel
             case 4000:
@@ -62,14 +69,9 @@ extension PGPay.Ali: PGPayProtocol {
             default:
                 payStatus = .error(code, "错误")
             }
-            completion?(payStatus)
+            PGPay.shared.completion?(payStatus)
             PGPay.Notic.callBack.post(userInfo:["status":payStatus])
         })
     }
 }
 
-public extension PGPay {
-    public struct Ali {
-        public static var _scheme:String = ""
-    }
-}
