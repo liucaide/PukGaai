@@ -22,7 +22,7 @@ public class App_UnionPay: CD_AppDelegate {
         
     }
     public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        PGPay.Ali.scheme = scheme
+        PGPay.Union.scheme = scheme
         return true
     }
     

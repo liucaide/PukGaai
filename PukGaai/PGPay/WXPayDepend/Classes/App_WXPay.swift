@@ -23,7 +23,7 @@ public class App_WXPay: CD_AppDelegate {
         self.appid = appid.isEmpty ? scheme : appid
     }
     public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        PGPay.Ali.scheme = scheme
+        PGPay.WX.scheme = scheme
         PGPay.WX.registerApp(appid)
         return true
     }

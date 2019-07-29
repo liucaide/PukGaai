@@ -28,14 +28,13 @@ extension PGPay.Ali.Signer:PGPayProtocol {
     
     static func pay(_ order: (order:PGPay.Ali.Signer.Order, key:String), completion: ((PGPay.Status) -> Void)?) {
         let signer = APRSASigner(privateKey: order.key)
-        let description = order.order.toString()
-        print_cd(description)
-        guard let signedString = signer?.sign(description, withRSA2: false) else {
+        var orderString = order.order.toString()
+        guard let signedString = signer?.sign(orderString, withRSA2: false) else {
             completion?(.signerError)
             return
         }
-        let checkStr =  description+"&sign=\"\(signedString)\"&sign_type=\"\("RSA")\""
-        PGPay.Ali.pay(checkStr, completion: completion)
+        orderString += "&sign=\"\(signedString)\"&sign_type=\"\("RSA")\""
+        PGPay.Ali.pay(orderString, completion: completion)
     }
 }
 extension PGPay.Ali {
