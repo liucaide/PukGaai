@@ -20,7 +20,7 @@ public class App_WXPay: CD_AppDelegate {
     /// 如果不传入 appid 则取实际的 scheme
     public init(_ scheme:String, appid:String = "") {
         self.scheme = CD.appUrlScheme(scheme)
-        self.appid = appid.isEmpty ? scheme : appid
+        self.appid = appid.isEmpty ? self.scheme : appid
     }
     public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         PGPay.WX.scheme = scheme

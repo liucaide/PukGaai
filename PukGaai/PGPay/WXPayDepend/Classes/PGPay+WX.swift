@@ -68,6 +68,7 @@ extension PGPay.WX: PGPayProtocol {
         req.timeStamp = order.timeStamp
         req.package = order.package
         WXApi.send(req)
+        PGPay.shared.completion = completion
     }
 }
 
