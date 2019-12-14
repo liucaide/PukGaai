@@ -15,7 +15,10 @@ public extension PGPay {
     public struct WX {
         static let delegate = Delegate()
         static func registerApp(_ id:String){
-            WXApi.registerApp(id)
+            // 1.8.6 版本
+            WXApi.registerApp(id, universalLink: universalLink)
+            // 1.8.4 版本及以下
+            //WXApi.registerApp(id)
         }
         public struct Order {
             public init(partnerId:String, prepayId:String, nonceStr:String, timeStamp:UInt32, sign:String) {
@@ -53,6 +56,7 @@ extension PGPay.WX: PGPayProtocol {
     }
     
     public static func pay(_ order: PGPay.WX.Order, completion: ((PGPay.Status) -> Void)?) {
+        PGPay.shared.completion = completion
         let  req = PayReq()
         guard !order.partnerId.isEmpty,
             !order.prepayId.isEmpty,
