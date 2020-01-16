@@ -37,7 +37,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 
 ```
-**当然也可以这样使用，即：复制 PGPay 中 App_ 内容**
+> **当然也可以这样使用，即：复制 PGPay 中 App_ 内容**
 ### 支付宝
 ```
     public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
@@ -72,8 +72,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 ```
-[回顶部目录](#回顶部目录)
+[回顶部目录](#目录)
 ## 友盟
 ```
 ```
-[回顶部目录](#回顶部目录)
+[回顶部目录](#目录)
