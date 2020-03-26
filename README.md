@@ -9,8 +9,18 @@
 - [友盟](#友盟)
 
 ## 支付插件
+#### 第一种使用方式 依赖 PukGaai 本地 支付宝 微信 SDK，这需要自行更新 SDK
+```
+pod 'PukGaai/Pay', :git => 'https://github.com/liucaide/PukGaai.git'
+
+或下载 PukGaai 后
+pod 'PukGaai/Pay', :path => './'
+```
+
+#### 第二种使用方式，不依赖本地支付宝 微信 SDK
+
 ![](https://github.com/liucaide/Images/blob/master/PGPay/1.png)
-- 你需要下载仓库中的 PGPay、PGPay.podspec，添加到你的主工程目录下
+- 你需要下载仓库中的 PGPayDepend 将 PGPay、PGPay.podspec，添加到你的主工程目录下
 - 当然不要忘记在 info.plist 中添加 LSApplicationQueriesSchemes 项
 - 三大支付插件已经完全进行组件化，只需要在 AppDelegate 中如此使用
 ```
@@ -33,6 +43,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         return composite.application(app, open: url, options: options)
+    }
+}
+
+
+extension App_Router {
+    func pay(_ router:CD_RouterProtocol, _ param:CD_RouterParameter = [:], _ callback:CD_RouterCallback = nil) {
+        switch router {
+        case Router.Pay.ali:
+            PGPay.Ali.pay(param.stringValue("order")) { (sta) in
+                let status = App_Router.statusForPGPay(sta)
+                callback?(["status": status.0, "msg":status.1])
+            }
+        case Router.Pay.union:
+            PGPay.Union.pay((param.stringValue("tn"), mode: nil, vc: nil)) { (sta) in
+                let status = App_Router.statusForPGPay(sta)
+                callback?(["status": status.0, "msg":status.1])
+            }
+        case Router.Pay.wx:
+            guard let json = param["json"] as? JSON else {
+                return
+            }
+            let order:PGPay.WX.Order = PGPay.WX.Order(json, tag: nil)
+            PGPay.WX.pay(order) { (sta) in
+                let status = App_Router.statusForPGPay(sta)
+                callback?(["status": status.0, "msg":status.1])
+            }
+        default:
+            break
+        }
+        
     }
 }
 
