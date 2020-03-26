@@ -9,7 +9,7 @@
 - [友盟](#友盟)
 
 ## 支付插件
-#### 第一种使用方式 依赖 PukGaai 本地 支付宝 微信 SDK，这需要自行更新 SDK
+#### 第一种使用方式: 依赖 PukGaai 本地 支付宝 微信 SDK，这需要自行更新 SDK
 ```
 pod 'PukGaai/Pay', :git => 'https://github.com/liucaide/PukGaai.git'
 
@@ -17,12 +17,13 @@ pod 'PukGaai/Pay', :git => 'https://github.com/liucaide/PukGaai.git'
 pod 'PukGaai/Pay', :path => './'
 ```
 
-#### 第二种使用方式，不依赖本地支付宝 微信 SDK
+#### 第二种使用方式：不依赖本地支付宝 微信 SDK
 
 ![](https://github.com/liucaide/Images/blob/master/PGPay/1.png)
 - 你需要下载仓库中的 PGPayDepend 将 PGPay、PGPay.podspec，添加到你的主工程目录下
 - 当然不要忘记在 info.plist 中添加 LSApplicationQueriesSchemes 项
 - 三大支付插件已经完全进行组件化，只需要在 AppDelegate 中如此使用
+
 ```
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
@@ -45,8 +46,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return composite.application(app, open: url, options: options)
     }
 }
-
-
+```
+- 调用
+```
 extension App_Router {
     func pay(_ router:CD_RouterProtocol, _ param:CD_RouterParameter = [:], _ callback:CD_RouterCallback = nil) {
         switch router {
