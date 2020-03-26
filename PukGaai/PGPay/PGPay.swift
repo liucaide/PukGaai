@@ -47,6 +47,6 @@ public extension PGPay {
 }
 extension PGPay.Notic: CaamDauNotificationProtocol {
     public var name: Notification.Name {
-        return Notification.Name(CD.appId + ".pay." + self.rawValue)
+        return Notification.Name("PGPay." + self.rawValue)
     }
 }

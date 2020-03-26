@@ -1,0 +1,4 @@
+module AlipaySDK {
+    header "AlipaySDK.framework/Headers/AlipaySDK.h"
+    export *
+}

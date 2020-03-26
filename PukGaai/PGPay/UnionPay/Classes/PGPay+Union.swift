@@ -18,7 +18,7 @@ extension PGPay.Union: PGPayProtocol {
     public typealias DataSource = (tn:String, mode:String?, vc:UIViewController?)
     public static var scheme: String {
         get {
-            return PGPay.shared.schemes["union"] as? String ?? ""
+            return PGPay.shared.schemes["union"] as? String ?? CD.appId
         }
         set {
             PGPay.shared.schemes["union"] = newValue

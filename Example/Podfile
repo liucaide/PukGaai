@@ -1,0 +1,8 @@
+use_frameworks!
+inhibit_all_warnings!
+platform :ios, '9.0'
+
+target 'Example' do
+  pod 'CaamDau/Module', :git => 'https://gitee.com/CaamDau/CaamDau.git'
+  pod 'PukGaai/Pay', :path => '../'
+end
